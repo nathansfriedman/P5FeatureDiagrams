@@ -1,5 +1,5 @@
 
-import java.util.Set;
+import java.util.HashSet;
 
 /*
  * To change this template, choose Tools | Templates
@@ -13,14 +13,28 @@ import java.util.Set;
 public class P5 {
     public static void main(String[] Args){
         Features EX = createEX();
-        Features Car = createCar();
-        Features GraphLibrary = createGraphLibrary();
-        boolean isEXValid = validateTree(EX);
-        boolean isCarValid = validateTree(Car);
-        boolean isGraphLibraryValid = validateTree(GraphLibrary);
+        boolean isEXValid = validateTree(EX, new HashSet<Features>());
         System.out.println("EX tree is " + isEXValid);
+        System.out.println();
+        
+        Features Car = createCar();
+        boolean isCarValid = validateTree(Car, new HashSet<Features>());
         System.out.println("Car tree is " + isCarValid);
+        System.out.println();
+        
+        Features GraphLibrary = createGraphLibrary();
+        boolean isGraphLibraryValid = validateTree(GraphLibrary, new HashSet<Features>());
         System.out.println("GraphLibrary tree is " + isGraphLibraryValid);
+        System.out.println();
+        
+        Features MixedEdgeType = createMixedEdgeType();
+        boolean isMixedEdgeTypeValid = validateTree(MixedEdgeType, new HashSet<Features>());
+        System.out.println("MixedEdgeType tree is " + isMixedEdgeTypeValid);
+        System.out.println();
+        
+        Features Cyclical = createCyclical();
+        boolean isCyclicalValid = validateTree(Cyclical, new HashSet<Features>());
+        System.out.println("Cyclical tree is " + isCyclicalValid);
     }
     
     static Features createEX(){
@@ -90,11 +104,31 @@ public class P5 {
         OR edge13 = new OR(MST, Prim);
         OR edge14 = new OR(MST, Kruskal);
         return root;
-    }
+    }    
     
+    static Features createMixedEdgeType(){
+        Features root = new Features("Root");
+        Features child1 = new Features("Child1");
+        Features child2 = new Features("Child2");
+        ANDMandatory edge1 = new ANDMandatory(root, child1);
+        XOR edge2 = new XOR(root, child2);
+        return root;
+    }    
+    
+    static Features createCyclical(){
+        Features root = new Features("Root");
+        Features child1 = new Features("Child1");
+        ANDMandatory edge1 = new ANDMandatory(root, child1);
+        ANDOptional edge2 = new ANDOptional(child1, root);
+        return root;
+    }   
         
-    
-    static boolean validateTree(Features node) {
+    static boolean validateTree(Features node, HashSet<Features> nodeList) {
+        if (nodeList.contains(node)) {
+            System.out.println("Invalid: Tree is cyclical");
+            return false;
+        }
+        nodeList.add(node);
         if (node.isTerminal()) {
             return true;
         }
@@ -102,10 +136,10 @@ public class P5 {
             return false;
         }
         for (Features child : node.getChildren()) {
-            if (!validateTree(child)) {
+            if (!validateTree(child, nodeList)) {
                 return false;
             }
-        }            
+        }
         return true;
     }
     

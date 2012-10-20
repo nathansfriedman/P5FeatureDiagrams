@@ -43,7 +43,7 @@ public class Features {
         for (Features child : children) {
             AbstractEdge edge = child.edgeToParent;
             if (!edge.parent.equals(this)) {
-                System.out.println("ERROR: Child lists incorrect parent!");
+                System.out.println("Invalid: Child lists incorrect parent");
                 return false;
             }
             Class<?> edgeClass = edge.getClass();
@@ -51,28 +51,28 @@ public class Features {
             switch (edgeType) {
                 case "ANDMandatory":
                 case "ANDOptional" : 
-                    if (isOR)       { System.out.println("AND edge found after OR at node " + child.name);
+                    if (isOR)       { System.out.println("Invalid: AND edge found after OR at node " + child.name);
                                       return false; }
-                    else if (isXOR) { System.out.println("AND edge found after XOR at node " + child.name);
+                    else if (isXOR) { System.out.println("Invalid: AND edge found after XOR at node " + child.name);
                                       return false; }
                     else            { isAND = true; }
                     break;
                 case "OR" :
-                    if (isAND)      { System.out.println("OR edge found after AND at node " + child.name);
+                    if (isAND)      { System.out.println("Invalid: OR edge found after AND at node " + child.name);
                                       return false; }
-                    else if (isXOR) { System.out.println("OR edge found after XOR at node " + child.name);
+                    else if (isXOR) { System.out.println("Invalid: OR edge found after XOR at node " + child.name);
                                       return false; }
                     else            { isOR = true; }
                     break;
                 case "XOR" :
-                    if (isAND)     { System.out.println("XOR edge found after AND at node " + child.name);
+                    if (isAND)     { System.out.println("Invalid: XOR edge found after AND at node " + child.name);
                                      return false; }
-                    else if (isOR) { System.out.println("XOR edge found after OR at node " + child.name);
+                    else if (isOR) { System.out.println("Invalid: XOR edge found after OR at node " + child.name);
                                      return false; }
                     else           { isXOR = true; }
                     break;
                 default :
-                    System.out.println("Unexpected Edge type!");
+                    System.out.println("Invalid: Unexpected Edge type!");
                     System.exit(1);
             }
         }

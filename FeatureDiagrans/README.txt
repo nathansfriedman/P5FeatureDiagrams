@@ -11,6 +11,9 @@ the project assignment and will report, "X tree is true" while one is an
 incorrect tree that will report "FalseTree is false" along with a message
 indicating why.
 
-Because of the way trees are created, and the fact that you give the tree's
-root to the validation method, the concept of connectedness doesn't apply. It
-should be impossible to create an unconnected tree. 
+Notes:
+Because of the way trees are created and the fact that you give the tree's root
+to the validation method, the concept of connectedness doesn't apply. It should
+be impossible to create an unconnected tree. It is, however, possible to create
+a cyclical tree. We partially check for this: the verification fails if any
+node has an ancestor as a child.
