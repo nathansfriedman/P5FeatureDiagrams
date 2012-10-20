@@ -1,3 +1,6 @@
+
+import java.util.Set;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -89,12 +92,21 @@ public class P5 {
         return root;
     }
     
-    static boolean validateTree(Features node){
-        if (node.isTerminal())
+        
+    
+    static boolean validateTree(Features node) {
+        if (node.isTerminal()) {
             return true;
-        else {
-            
+        }
+        if (!node.hasCompatibleChildren()) {
+            return false;
+        }
+        for (Features child : node.getChildren()) {
+            if (!validateTree(child)) {
+                return false;
+            }
         }            
-        return false;
+        return true;
     }
+    
 }
